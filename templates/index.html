@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Users</title>
+    </head>
+    <body>
+        <div class='wrapper'>
+            <h2>Список пользователей:</h2>
+            <p><a href="/create">Добавить</a></p>
+            <table>
+                <thead><th>Id</th><th>Имя</th><th>Фамилия</th></thead>
+                {{range . }}
+                <tr>
+                    <td>{{.Id}}</td>
+                    <td>{{.Name1}}</td>
+                    <td>{{.Name2}}</td>  
+                    <td><a href="/delete/{{.Id}}">Удалить</a></td>                 
+                </tr>
+                {{end}}
+            </table>
+    </div>
+    </body>
+</html>
