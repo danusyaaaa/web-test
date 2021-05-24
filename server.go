@@ -6,8 +6,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 
-	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -22,11 +22,9 @@ func main() {
 	database = db
 	defer db.Close()
 
-	router := mux.NewRouter()
-	router.HandleFunc("/", PageHandler)
-	router.HandleFunc("/create", CreateHandler)
-	router.HandleFunc("/delete/{id:[0-9]+}", DeleteHandler)
-	http.Handle("/", router)
+	http.HandleFunc("/", PageHandler)
+	http.HandleFunc("/create", CreateHandler)
+	http.HandleFunc("/delete", DeleteHandler)
 	fmt.Println("Server is listening...")
 	http.ListenAndServe(":8082", nil)
 }
@@ -78,9 +76,7 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
-
+	id, _ := strconv.Atoi(r.URL.Query().Get("id"))
 	_, err := database.Exec("delete from users1 where Id = ?", id)
 	checkError(err)
 	http.Redirect(w, r, "/", http.StatusMovedPermanently)
